@@ -1,7 +1,8 @@
-# Installing Ruby 3.1.2, Rails 7.1.5, and PostgreSQL on Ubuntu (Using Zsh) `Change the versions where appropriate`
+# Installing Ruby 3.1.2, Rails 7.1.5, and PostgreSQL on Ubuntu (Using Zsh)
 
 This README provides a step-by-step guide to install Ruby version 3.1.2, Ruby on Rails version 7.1.5, and PostgreSQL on Ubuntu. This guide assumes you're using Ubuntu 20.04 or later and Zsh as your shell. All commands are intended to be run in a terminal.
-
+ `Change the versions where appropriate`
+ 
 ## Prerequisites
 - Ensure you have administrative access (sudo privileges).
 - Update your system packages:
