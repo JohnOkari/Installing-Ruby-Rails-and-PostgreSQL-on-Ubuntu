@@ -156,3 +156,108 @@ Visit `http://localhost:3000` in your browser to see the Rails welcome page.
 - **Version mismatches**: Run `rbenv rehash` after installing gems.
 
 If you encounter issues, check the official documentation for [rbenv](https://github.com/rbenv/rbenv), [Rails](https://guides.rubyonrails.org/), or [PostgreSQL](https://www.postgresql.org/docs/).
+
+# ALTER ROLE
+In PostgreSQL, altering roles (users) is done using the `ALTER ROLE` command. Based on the context of your previous question about installing Ruby, Rails, and PostgreSQL on Ubuntu, I’ll assume you’re referring to modifying the PostgreSQL role (`yourusername`) created during the setup. Below, I’ll provide a step-by-step guide to alter roles in PostgreSQL, focusing on common modifications like changing passwords, privileges, or role attributes. These steps assume you're using Zsh as your shell, as specified earlier.
+
+### Step 1: Access the PostgreSQL Prompt
+Log in to PostgreSQL as the `postgres` superuser:
+```zsh
+sudo -u postgres psql
+```
+
+This opens the PostgreSQL interactive prompt (`psql`).
+
+### Step 2: Identify the Role to Alter
+List all roles to confirm the role you want to modify (e.g., `yourusername`):
+```sql
+\du
+```
+This displays a table of roles and their attributes.
+
+### Step 3: Common Role Alterations
+Here are examples of common changes you might want to make to the role `yourusername`. Run these commands in the `psql` prompt.
+
+#### 3.1: Change the Role’s Password
+To update the password:
+```sql
+ALTER ROLE yourusername WITH PASSWORD 'newpassword';
+```
+
+#### 3.2: Grant or Revoke Database Creation Privileges
+If you need to modify whether the role can create databases:
+- Grant:
+  ```sql
+  ALTER ROLE yourusername WITH CREATEDB;
+  ```
+- Revoke:
+  ```sql
+  ALTER ROLE yourusername WITH NOCREATEDB;
+  ```
+
+#### 3.3: Grant or Revoke Superuser Privileges
+To make the role a superuser (use with caution, as this gives full database access):
+- Grant:
+  ```sql
+  ALTER ROLE yourusername WITH SUPERUSER;
+  ```
+- Revoke:
+  ```sql
+  ALTER ROLE yourusername WITH NOSUPERUSER;
+  ```
+
+#### 3.4: Allow Role to Log In
+If the role can’t log in, enable it:
+```sql
+ALTER ROLE yourusername WITH LOGIN;
+```
+To disable login:
+```sql
+ALTER ROLE yourusername WITH NOLOGIN;
+```
+
+#### 3.5: Grant Specific Privileges on a Database
+To grant the role specific permissions (e.g., on `yourapp_development`):
+- Grant all privileges on a database:
+  ```sql
+  GRANT ALL PRIVILEGES ON DATABASE yourapp_development TO yourusername;
+  ```
+- Grant specific privileges (e.g., SELECT, INSERT):
+  ```sql
+  GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA public TO yourusername;
+  ```
+
+To revoke privileges:
+```sql
+REVOKE ALL ON DATABASE yourapp_development FROM yourusername;
+```
+
+#### 3.6: Rename the Role
+To rename the role:
+```sql
+ALTER ROLE yourusername RENAME TO newusername;
+```
+**Note**: If you rename the role, update your Rails `config/database.yml` to reflect the new username.
+
+#### 3.7: Set Role Attributes
+You can modify other attributes, like connection limits or role expiration:
+- Set a connection limit:
+  ```sql
+  ALTER ROLE yourusername WITH CONNECTION LIMIT 100;
+  ```
+- Set a role to expire (e.g., on a specific date):
+  ```sql
+  ALTER ROLE yourusername VALID UNTIL '2026-01-01';
+  ```
+
+### Step 4: Verify Changes
+Check the updated role attributes:
+```sql
+\du
+```
+This lists all roles and their updated attributes.
+
+Exit the `psql` prompt:
+```sql
+\q
+```
